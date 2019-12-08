@@ -1,5 +1,33 @@
 # Alpakka Demo: Postgres ⇒ Couchbase
 
+## Requirements
+
+* JDK 8 or greater
+* docker && docker-compose
+* Lightbend Commercial Credentials
+
+## Quickstart
+
+* Download and start the [Lightbend Telemetry Prometheus Sandbox](https://developer.lightbend.com/docs/telemetry/current/sandbox/prometheus-sandbox.html)
+* Build the Postgres Source Database
+
+```shell script
+cd docker/demo
+docker build -t alpakka-demo-postgres-image .
+```
+
+* Start the Postgres source database and the Couchbase destination database
+
+```shell script
+docker-compose up
+```
+
+* Run the demo application
+
+```shell script
+sbt "alpakka-jdbc-demo/run"
+```
+
 ## Generating the source database
 
 ### Quick Way
