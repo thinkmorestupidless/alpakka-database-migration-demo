@@ -1,4 +1,3 @@
-//#full-example
 package com.example
 
 import java.util.UUID
@@ -75,13 +74,10 @@ class AlpakkaDemo {
 //          "destination_data"
 //        )
 //      )
-      .instrumentedRunWith(Sink.foreach(println))(name = "migration-stream")
+      .instrumentedRunWith(Sink.ignore)(name = "migration-stream")
 }
 
-//#main-class
 object AlpakkaDemo extends App {
 
   new AlpakkaDemo
 }
-//#main-class
-//#full-example

@@ -22,15 +22,13 @@ class Generator {
 
   val faker = new Faker()
 
-  val recordCount = 100
-  val headers = ByteString("customer_id,first_name, last_name, email, amount\n")
+  val recordCount = 1000000
   val outputPath = Paths.get("./docker/generator/docker-entrypoint-initdb.d/generated-records.csv")
 
   Source.repeat(NotUsed)
     .take(recordCount)
     .map(_ => createRecord())
     .via(CsvFormatting.format())
-    .prepend(Source.single(headers))
     .runWith(FileIO.toPath(outputPath))
 
   def createRecord(): List[String] = {

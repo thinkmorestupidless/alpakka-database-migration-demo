@@ -52,6 +52,8 @@ If you want to change the shape of the source data you'll need to generate the s
 * Run the `data-generator` project - this will generate a new file at `./docker/generator/docker-entrypoint-initdb.d/generated-records.csv`
 * Build and run the `generator` docker image and dump the data out
 
+> Make sure you've deleted the `./db-data` directory - otherwise the database won't initialise and load the CSV data
+
 ```shell script
 cd docker/generator
 docker build -t alpakka-demo-data-image .
@@ -71,3 +73,17 @@ docker build -t alpakka-demo-postgres-image .
 ```shell script
 rm -rf db-data
 ```
+
+Now you can run `docker-compose up` and bring the new database up. You'll see log output that looks something like this:
+
+```shell script
+postgres_1   | Restoring alpakka_demo using /docker-entrypoint-initdb.d/alpakka_demo.pgdata
+postgres_1   | pg_restore: connecting to database for restore
+postgres_1   | pg_restore: creating TABLE "public.unbilled_data"
+postgres_1   | pg_restore: processing data for table "public.unbilled_data"
+postgres_1   | pg_restore: creating CONSTRAINT "public.unbilled_data unbilled_data_pkey"
+postgres_1   | pg_restore: creating DEFAULT ACL "public.DEFAULT PRIVILEGES FOR SEQUENCES"
+postgres_1   | pg_restore: creating DEFAULT ACL "public.DEFAULT PRIVILEGES FOR TABLES"
+```
+
+The source data is quite large (millions of rows) so can take a little time to load.
