@@ -1,4 +1,4 @@
-# Alpakka Demo: Postgres -> Couchbase
+# Alpakka Demo: Postgres ⇒ Couchbase
 
 ## Generating the source database
 
