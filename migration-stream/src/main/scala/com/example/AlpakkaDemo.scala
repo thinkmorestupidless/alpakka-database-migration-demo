@@ -6,21 +6,19 @@ import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.alpakka.couchbase.scaladsl.CouchbaseFlow
-import akka.stream.alpakka.slick.javadsl.SlickSession
 import akka.stream.alpakka.couchbase.{CouchbaseSessionSettings, CouchbaseWriteSettings}
-import akka.stream.scaladsl.Sink
-import com.couchbase.client.java.{PersistTo, ReplicateTo}
-
-import scala.concurrent.duration._
+import akka.stream.alpakka.slick.javadsl.SlickSession
 import akka.stream.alpakka.slick.scaladsl._
-import akka.stream.scaladsl._
+import akka.stream.scaladsl.Sink
 import com.couchbase.client.java.document.JsonDocument
 import com.couchbase.client.java.document.json.JsonObject
+import com.couchbase.client.java.{PersistTo, ReplicateTo}
+import com.lightbend.cinnamon.akka.stream.CinnamonAttributes.SourceWithInstrumented
 import slick.jdbc.GetResult
 
-import com.lightbend.cinnamon.akka.stream.CinnamonAttributes.SourceWithInstrumented
-
 import scala.concurrent.Future
+import scala.concurrent.duration._
+
 
 class AlpakkaDemo {
   import postgresSession.profile.api._
