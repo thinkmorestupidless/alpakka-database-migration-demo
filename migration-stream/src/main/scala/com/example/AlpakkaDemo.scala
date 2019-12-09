@@ -34,8 +34,8 @@ class AlpakkaDemo {
   // Configure Couchbase Session
   val writeSettings = CouchbaseWriteSettings()
     .withParallelism(3)
-    .withPersistTo(PersistTo.FOUR)
-    .withReplicateTo(ReplicateTo.THREE)
+    .withPersistTo(PersistTo.NONE)
+    .withReplicateTo(ReplicateTo.NONE)
     .withTimeout(5.seconds)
 
   val sessionSettings = CouchbaseSessionSettings(system)
@@ -67,13 +67,14 @@ class AlpakkaDemo {
         DestinationData(src.id, src.firstName, src.lastName, src.email, src.amount, "", "")
       }
       .map(toJsonDocument)
-//      .via(
-//        CouchbaseFlow.upsert(
-//          sessionSettings,
-//          writeSettings,
-//          "destination_data"
-//        )
-//      )
+      .via(
+        CouchbaseFlow.upsert(
+          sessionSettings,
+          writeSettings,
+          "destination_data"
+        )
+      )
+      .log("error logging")
       .instrumentedRunWith(Sink.ignore)(name = "migration-stream")
 }
 

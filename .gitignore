@@ -1,7 +1,11 @@
 db-data
 docker/generator/docker-entrypoint-initdb.d/generated-records.csv
 
+#cinnamon sandbox
 cinnamon-prometheus-docker-sandbox*
+
+# database volumes
+/db-data
 
 #common
 logs

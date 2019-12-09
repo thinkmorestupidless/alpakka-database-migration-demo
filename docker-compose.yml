@@ -3,16 +3,16 @@ services:
   postgres:
     image: alpakka-demo-postgres-image
     volumes:
-      - ./db-data:/var/lib/postgresql/data
+      - ./db-data/postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
   couchbase:
     image: couchbase
+    volumes:
+      - ./db-data/couchbase:/opt/couchbase/var/lib/couchbase
     ports:
       - 8091-8096:8091-8096
       - 11210-11211:11210-11211
-  #akka:
-  #  image: alpakka-jdbc-demo:1.0
 
 volumes:
   db-data:

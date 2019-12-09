@@ -22,13 +22,30 @@ docker build -t alpakka-demo-postgres-image .
 docker-compose up
 ```
 
+* Setup the Couchbase cluster and bucket
+    * Visit http://localhost:8091 in a browser
+    * Click 'Setup New Cluster'
+    * ![Couchbase Stage 1](images/couchbase-stage-1.png "Couchbase Stage 1")
+    * Create new cluster with Cluster Name = `demo` and Password `admin123`
+    * ![Couchbase Stage 2](images/couchbase-stage-2.png "Couchbase Stage 2")
+    * Accept the terms
+    * ![Couchbase Stage 3](images/couchbase-stage-3.png "Couchbase Stage 3")
+    * Depending on your memory allocation you may want to disable `Eventing` and `Analytics`
+    * ![Couchbase Stage 4](images/couchbase-stage-4.png "Couchbase Stage 4")
+    * Create a new bucket named `destination_data`
+    * ![Couchbase Stage 4](images/couchbase-stage-5.png "Couchbase Stage 5")
+
 * Run the demo application
 
 ```shell script
 sbt "alpakka-jdbc-demo/run"
 ```
 
-## Generating the source database
+* View the Telemetry results for the running stream
+
+![Akka Streams Telemetry Graphs](images/akka-streams-telemetry-graphs.png "Akka Streams Telemetry Graphs")
+
+## (Re)Generating the source database
 
 ### Quick Way
 
