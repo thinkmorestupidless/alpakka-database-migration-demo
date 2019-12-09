@@ -54,6 +54,8 @@ class AlpakkaDemo {
     obj.put("lastName", data.lastName)
     obj.put("email", data.email)
     obj.put("amount", data.amount)
+    obj.put("phone", data.phone)
+    obj.put("country", data.country)
 
     JsonDocument.create(data.id.toString, obj)
   }
