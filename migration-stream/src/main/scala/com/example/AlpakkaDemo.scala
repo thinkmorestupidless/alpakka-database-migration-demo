@@ -22,8 +22,10 @@ import com.lightbend.cinnamon.akka.stream.CinnamonAttributes.SourceWithInstrumen
 
 import scala.concurrent.Future
 
-
 class AlpakkaDemo {
+  import postgresSession.profile.api._
+
+  // Required for the Akka Stream to be materialized
   implicit val system = ActorSystem()
   implicit val mat = ActorMaterializer()
 
@@ -47,8 +49,6 @@ class AlpakkaDemo {
   // Slick query result mapping
   implicit val getUserResult = GetResult(r => SourceData(UUID.fromString(r.nextString()), r.nextString, r.nextString(), r.nextString(), r.nextBigDecimal()))
 
-  import postgresSession.profile.api._
-
   // Converts the destination data into a JsonDocument that can be upserted into Couchbase
   def toJsonDocument(data: DestinationData): JsonDocument = {
     val obj = JsonObject.create()
@@ -60,13 +60,23 @@ class AlpakkaDemo {
     JsonDocument.create(data.id.toString, obj)
   }
 
+  // This is the Akka Stream graph which does the work...
+
   val done: Future[Done] =
     Slick
+      // the source of data is a query executed on the Postgres database
       .source(sql"SELECT customer_id, first_name, last_name, email, amount FROM unbilled_data".as[SourceData])
+
+      // Convert the SourceData to a DestinationData instance
+      // This is simulating the migration of a table - adding fields and populating with default data
       .map { src =>
         DestinationData(src.id, src.firstName, src.lastName, src.email, src.amount, "", "")
       }
+
+      // Convert the DestinationData instance to the JsonDocument that will be stored in Couchbase
       .map(toJsonDocument)
+
+      // Store in Couchbase
       .via(
         CouchbaseFlow.upsert(
           sessionSettings,
@@ -74,7 +84,12 @@ class AlpakkaDemo {
           "destination_data"
         )
       )
+
+      // Enable logging (so we can see any errors)
       .log("error logging")
+
+      // The sink here is empty, it just generates the upstream demand
+      // We're using the 'instrumented' runWith so we can see metrics.
       .instrumentedRunWith(Sink.ignore)(name = "migration-stream")
 }
 
